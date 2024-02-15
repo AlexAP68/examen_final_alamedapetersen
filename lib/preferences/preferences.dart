@@ -3,15 +3,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Preferences {
   static late SharedPreferences _prefs;
 
+//Creamos las variables
   static String _nom = "";
   static String _contrasenya = "";
-  static bool _comprobar = false;
 
-   static Future  init() async{
+//Iniciamos preferences
+  static Future init() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
 
-      _prefs = await SharedPreferences.getInstance();
-    }
-
+//Geters y seters para las variables
   static String get nom {
     return _prefs.getString("nom") ?? _nom;
   }
@@ -30,18 +31,10 @@ class Preferences {
     _prefs.setString("contrasenya", value);
   }
 
-  static bool get comprobar {
-    return _prefs.getBool("comprobar") ?? _comprobar;
-  }
 
-  static set comprobar(bool value) {
-    _comprobar = value;
-    _prefs.setBool("comprobar", value);
-  }
-
+//Limpiamos el preference
   static void clearCredentials() {
     _prefs.remove("nom");
     _prefs.remove("contrasenya");
-    _prefs.remove("comprobar");
   }
 }

@@ -12,35 +12,49 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _rememberMe = false;
 
+//Se inicia
   @override
   void initState() {
     super.initState();
     _loadCredentials();
   }
 
+//Carga las credenciales y si existen envia al usuario directamente al homescreen
   void _loadCredentials() {
+  final userName = Preferences.nom;
+  final password = Preferences.contrasenya;
 
-    setState(() {
-      _userController.text = Preferences.nom;
-      _passwordController.text = Preferences.contrasenya; 
-      _rememberMe = Preferences.comprobar;
+
+  _userController.text = userName;
+  _passwordController.text = password;
+
+
+  if (userName.isNotEmpty && password.isNotEmpty) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Navigator.pushReplacementNamed(context, 'home');
     });
   }
+}
 
+//Al darle al boton de login guarda las variables
   void _login() {
-    // Guarda o elimina las credenciales según el estado de _rememberMe
-    if (_rememberMe) {
-      Preferences.nom = _userController.text;
-      Preferences.contrasenya = _passwordController.text; 
-      Preferences.comprobar = _rememberMe;
-    } else {
-      Preferences.clearCredentials(); 
+    final userName = _userController.text;
+    final password = _passwordController.text;
+
+    // Solo guarda las credenciales si los campos no están vacíos.
+    if (userName.isNotEmpty && password.isNotEmpty) {
+      Preferences.nom = userName;
+      Preferences.contrasenya = password;
+
     }
+
     // Navega al HomeScreen
     Navigator.pushReplacementNamed(context, 'home');
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,19 +74,6 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(labelText: 'Contrasenya'),
               obscureText: true,
             ),
-            Row(
-              children: [
-                Checkbox(
-                  value: _rememberMe,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _rememberMe = value!;
-                    });
-                  },
-                ),
-                Text('Recorda\'m'),
-              ],
-            ),
             ElevatedButton(onPressed: _login, child: Text('Inicia Sessió')),
           ],
         ),
@@ -80,3 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
+
+
+
+

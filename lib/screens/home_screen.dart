@@ -1,4 +1,6 @@
 import 'package:firebase_demo/models/arbol.dart';
+import 'package:firebase_demo/preferences/preferences.dart';
+import 'package:firebase_demo/screens/login_screen.dart';
 import 'package:firebase_demo/services/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +19,19 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home Screen'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            //Vamos a la pantalla de login
-            onPressed: () {
-              //userService.signOut();
-              Navigator.pushReplacementNamed(context, 'login');
-            },
-          ),
+  icon: const Icon(Icons.exit_to_app),
+  // Al presionar para cerrar sesión
+  onPressed: () {
+    // Limpia las credenciales guardadas
+    Preferences.clearCredentials();
+
+ 
+
+    // Redirige al usuario a la pantalla de login
+    Navigator.pushReplacementNamed(context, 'login');
+  },
+),
+
         ],
       ),
       //Si no hay usuarios muestra un loading y si no hay arboles muestra la lista(tarda un poco en cargar la lista)
